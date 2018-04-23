@@ -264,7 +264,7 @@ class PhabricatorPlugin(IssuePlugin2):
 
         task_id = form_data['issue_id']
         if task_id.startswith('T'):
-            task_id = task_id[:1]
+            task_id = task_id[1:]
         task_id = int(task_id.strip())
 
         try:
