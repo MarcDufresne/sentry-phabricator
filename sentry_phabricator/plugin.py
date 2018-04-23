@@ -291,12 +291,12 @@ class PhabricatorPlugin(IssuePlugin2):
             'url': urlparse.urljoin(self.get_option('host', group.project), "T{}".format(task_id))
         }
 
-    def get_issue_url(self, group, issue, **kwargs):
-        if isinstance(issue, dict):
-            return issue['url']
-        return urlparse.urljoin(self.get_option('host', group.project), "T{}".format(issue))
+    def get_issue_url(self, group, issue_id, **kwargs):
+        if isinstance(issue_id, dict):
+            return issue_id['url']
+        return urlparse.urljoin(self.get_option('host', group.project), "T{}".format(issue_id))
 
-    def get_issue_label(self, group, issue, **kwargs):
-        if isinstance(issue, dict):
-            return 'T{}'.format(issue['id'])
-        return 'T{}'.format(issue)
+    def get_issue_label(self, group, issue_id, **kwargs):
+        if isinstance(issue_id, dict):
+            return 'T{}'.format(issue_id['id'])
+        return 'T{}'.format(issue_id)
