@@ -243,7 +243,7 @@ class PhabricatorPlugin(IssuePlugin2):
     def get_link_existing_issue_fields(self, request, group, event, **kwargs):
         return [
             {
-                'name': 'task_id',
+                'name': 'issue_id',
                 'label': 'Task ID',
                 'type': 'text',
                 'help': 'Enter the Task ID, e.g.: "34" or "T34"'
@@ -262,7 +262,7 @@ class PhabricatorPlugin(IssuePlugin2):
     def link_issue(self, request, group, form_data, **kwargs):
         api = self.get_api(group.project)
 
-        task_id = form_data['task_id']
+        task_id = form_data['issue_id']
         if task_id.startswith('T'):
             task_id = task_id[:1]
         task_id = int(task_id.strip())
