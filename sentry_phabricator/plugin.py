@@ -34,15 +34,13 @@ class PhabricatorPlugin(IssuePlugin2):
     conf_title = 'Phabricator'
     conf_key = 'phabricator'
 
-    issue_fields = frozenset(['id', 'url'])
-
     @staticmethod
     def get_configure_plugin_fields(*args, **kwargs):
         # TODO: How to do validation?
         return [
             {
                 'name': 'host',
-                'label': 'Phabricator Host (e.g. http://secure.phabricator.org)',
+                'label': 'Phabricator Host',
                 'type': 'text',
                 'help': 'Host of your Phabricator instance, e.g. "http://secure.phabricator.org"'
             },
@@ -53,7 +51,8 @@ class PhabricatorPlugin(IssuePlugin2):
             },
             {
                 'name': 'projectPHIDs',
-                'label': 'Project PHIDs (in JSON format)',
+                'label': 'Project PHIDs',
+                'help': 'List of PHIDs in JSON format, e.g.: ["PHID-PROJ-xxxxxxxx", ...]',
                 'type': 'textarea',
                 'required': False
             }
@@ -235,10 +234,7 @@ class PhabricatorPlugin(IssuePlugin2):
             raise forms.ValidationError('Unable to reach Phabricator host: %s' % (e.message,))
 
         task_id = "{}".format(data['id'])
-        return {
-            'id': task_id,
-            'url': urlparse.urljoin(self.get_option('host', group.project), "T{}".format(task_id))
-        }
+        return task_id
 
     def get_link_existing_issue_fields(self, request, group, event, **kwargs):
         return [
@@ -285,18 +281,12 @@ class PhabricatorPlugin(IssuePlugin2):
             except Exception:
                 pass
 
-        task_id = "{}".format(task['id'])
         return {
-            'id': task_id,
-            'url': urlparse.urljoin(self.get_option('host', group.project), "T{}".format(task_id))
+            'title': task['fields']['name'],
         }
 
     def get_issue_url(self, group, issue_id, **kwargs):
-        if isinstance(issue_id, dict):
-            return issue_id['url']
         return urlparse.urljoin(self.get_option('host', group.project), "T{}".format(issue_id))
 
     def get_issue_label(self, group, issue_id, **kwargs):
-        if isinstance(issue_id, dict):
-            return 'T{}'.format(issue_id['id'])
         return 'T{}'.format(issue_id)
