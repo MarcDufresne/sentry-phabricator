@@ -242,7 +242,7 @@ class PhabricatorPlugin(IssuePlugin2):
                 'name': 'issue_id',
                 'label': 'Task ID',
                 'type': 'text',
-                'help': 'Enter the Task ID, e.g.: "34" or "T34"'
+                'help': 'Enter the Task ID, e.g.: "34"'
             },
             {
                 'name': 'comment',
@@ -258,10 +258,7 @@ class PhabricatorPlugin(IssuePlugin2):
     def link_issue(self, request, group, form_data, **kwargs):
         api = self.get_api(group.project)
 
-        task_id = form_data['issue_id']
-        if task_id.startswith('T'):
-            task_id = task_id[1:]
-        task_id = int(task_id.strip())
+        task_id = int(form_data['issue_id'])
 
         try:
             task = api.maniphest.search(constraints={'ids': [task_id]})['data'][0]
@@ -282,8 +279,7 @@ class PhabricatorPlugin(IssuePlugin2):
                 pass
 
         return {
-            'id': task_id,
-            'title': task['fields']['name'],
+            'title': task['fields']['name']
         }
 
     def get_issue_url(self, group, issue_id, **kwargs):
