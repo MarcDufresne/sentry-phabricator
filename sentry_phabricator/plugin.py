@@ -263,6 +263,8 @@ class PhabricatorPlugin(IssuePlugin2):
             task_id = task_id[1:]
         task_id = int(task_id.strip())
 
+        form_data['issue_id'] = "{}".format(task_id)
+
         try:
             task = api.maniphest.search(constraints={'ids': [task_id]})['data'][0]
         except phabricator.APIError, e:
